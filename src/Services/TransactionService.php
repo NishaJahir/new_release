@@ -19,6 +19,7 @@ use Plenty\Modules\Plugin\DataBase\Contracts\DataBase;
 use Plenty\Modules\Plugin\DataBase\Contracts\Query;
 use Novalnet\Models\TransactionLog;
 use Plenty\Plugin\Log\Loggable;
+use Novalnet\Services\PaymentService;
 
 /**
  * Class TransactionService
@@ -28,6 +29,23 @@ use Plenty\Plugin\Log\Loggable;
 class TransactionService
 {
     use Loggable;
+     
+	/**
+	 *
+	 * @var PaymentService
+	 */
+	private $paymentService;
+	
+	/**
+	 * Constructor.
+	 *
+	 * @param PaymentService $paymentService
+	 */
+	 
+    public function __construct(PaymentService $paymentService)
+    {
+	    $this->paymentService  = $paymentService;
+	}
 
     /**
      * Save data in transaction table
@@ -73,7 +91,7 @@ class TransactionService
     {
         $database = pluginApp(DataBase::class);
         $order    = $database->query(TransactionLog::class)->where($key, '=', $value)->get();
-        $db_details = $paymentService->getDatabaseValues($value);
+        $db_details = $this->paymentService->getDatabaseValues($value);
         $this->getLogger(__METHOD__)->error('db', $db_details);
         $update_info = $order[0];
         $additional_info = json_decode($update_info->additionalInfo, true);
