@@ -198,26 +198,12 @@ class PaymentHelper
             $payment->status = Payment::STATUS_REFUNDED;
         }
         
-        $invoicePrepaymentDetails =  [
-              'invoice_bankname'  => $requestData['invoice_bankname'],
-              'invoice_bankplace' => $requestData['invoice_bankplace'],
-              'invoice_iban'      => $requestData['invoice_iban'],
-              'invoice_bic'       => $requestData['invoice_bic'],
-              'due_date'          => $requestData['due_date'],
-              'invoice_type'      => $requestData['invoice_type'],
-              'invoice_account_holder' => $requestData['invoice_account_holder']
-               ];
-           
-        $invoiceDetails = json_encode($invoicePrepaymentDetails);
         $paymentProperty     = [];
         $paymentProperty[]   = $this->getPaymentProperty(PaymentProperty::TYPE_BOOKING_TEXT, $bookingText);
         $paymentProperty[]   = $this->getPaymentProperty(PaymentProperty::TYPE_TRANSACTION_ID, $transactionId);
         $paymentProperty[]   = $this->getPaymentProperty(PaymentProperty::TYPE_ORIGIN, Payment::ORIGIN_PLUGIN);
         $paymentProperty[]   = $this->getPaymentProperty(PaymentProperty::TYPE_EXTERNAL_TRANSACTION_STATUS, $requestData['tid_status']);
         
-        if (in_array($requestData['payment_id'], ['27','41'])) {
-            $paymentProperty[]   = $this->getPaymentProperty(PaymentProperty::TYPE_ACCOUNT_OF_RECEIVER, $invoiceDetails); 
-        }
         
         if ($requestData['payment_id'] == '59') {
         $cashpayment_comments = $this->getCashPaymentComments($requestData);
