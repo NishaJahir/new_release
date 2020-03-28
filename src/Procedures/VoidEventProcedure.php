@@ -20,6 +20,7 @@ use Plenty\Modules\Order\Models\Order;
 use Plenty\Plugin\Log\Loggable;
 use Plenty\Modules\Payment\Contracts\PaymentRepositoryContract;
 use Novalnet\Services\PaymentService;
+use Novalnet\Services\TransactionService;
 
 /**
  * Class VoidEventProcedure
@@ -35,15 +36,23 @@ class VoidEventProcedure
 	private $paymentService;
 	
 	/**
+	 *
+	 * @var Transaction
+	 */
+	private $transaction;
+
+	
+	/**
 	 * Constructor.
 	 *
-	 * @param PaymentHelper $paymentHelper
 	 * @param PaymentService $paymentService
+	* @param TransactionService $tranactionService
 	 */
 	 
-    public function __construct(PaymentService $paymentService)
+    public function __construct(PaymentService $paymentService, TransactionService $tranactionService)
     {
 	    $this->paymentService  = $paymentService;
+	    $this->transaction          = $tranactionService;
 	}	
 	
     /**
@@ -77,7 +86,11 @@ class VoidEventProcedure
 				  }
 			}
 		}
-
+	
+	    $orderInfo = $this->transaction->getTransactionData('tid', $tid);
+	$order_info = json_decode($orderInfo[0]->additionalInfo);
+	$key = $order_info->payment_id;
+	    
 	    if(in_array($status, ['85', '91', '98', '99'])) {
         $this->paymentService->doCaptureVoid($order, $paymentDetails, $tid, $key, '');
 	    } 
