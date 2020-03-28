@@ -735,6 +735,7 @@ class PaymentService
         
          $response = $this->paymentHelper->executeCurl($paymentRequestData, NovalnetConstants::PAYPORT_URL);
          $responseData =$this->paymentHelper->convertStringToArray($response['response'], '&');
+		$this->getLogger(__METHOD__)->eroror('res',$responseData);
          if ($responseData['status'] == '100') {
             $paymentData['currency']    = $paymentDetails[0]->currency;
             $paymentData['paid_amount'] = (float) $order->amounts[0]->invoiceTotal;
