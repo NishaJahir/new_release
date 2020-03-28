@@ -711,7 +711,7 @@ class PaymentService
      * @param bool $capture
      * @return none
      */
-    public function doCaptureVoid($order, $paymentDetails, $tid, $key, $invoiceDetails, $capture=false) 
+    public function doCaptureVoid($order, $paymentDetails, $tid, $key, $capture=false) 
     {
         
         try {
@@ -747,21 +747,10 @@ class PaymentService
             
             $transactionComments = '';
             if($responseData['tid_status'] == '100') {
-                   if (in_array($key, ['27', '41'])) {	    
-                     $bankDetails = json_decode($invoiceDetails);
-                     $paymentData['invoice_bankname'] = $bankDetails->invoice_bankname;
-                     $paymentData['invoice_bankplace'] = $bankDetails->invoice_bankplace;
-                     $paymentData['invoice_iban'] = $bankDetails->invoice_iban;
-                     $paymentData['invoice_bic'] = $bankDetails->invoice_bic;
-                     $paymentData['due_date'] = $responseData['due_date'];
-                     $paymentData['invoice_type'] = $bankDetails->invoice_type;
-                     $paymentData['invoice_account_holder'] = $bankDetails->invoice_account_holder;
-                     $paymentData['payment_id'] = $key;
-                 } 
                $transactionComments .= PHP_EOL . sprintf($this->paymentHelper->getTranslatedText('transaction_confirmation', $paymentRequestData['lang']), date('d.m.Y'), date('H:i:s'));
            } else {
             $transactionComments .= PHP_EOL . sprintf($this->paymentHelper->getTranslatedText('transaction_cancel', $paymentRequestData['lang']), date('d.m.Y'), date('H:i:s'));
-        }
+         }
              if (($responseData['tid_status'] == '100' && $key == '27') || $responseData['tid_status'] != '100') {
              $paymentData['paid_amount'] = 0;
              }
