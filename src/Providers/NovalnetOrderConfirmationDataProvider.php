@@ -55,10 +55,6 @@ class NovalnetOrderConfirmationDataProvider
 				$properties = $payment->properties;
 				foreach($properties as $property)
 				{
-				if ($property->typeId == 21) 
-				{
-				$invoiceDetails = $property->value;
-				}
 				if ($property->typeId == 30)
 				{
 				$tid_status = $property->value;
@@ -83,7 +79,7 @@ class NovalnetOrderConfirmationDataProvider
 					if(!empty($db_details['test_mode'])) {
 						$comments .= PHP_EOL . $paymentHelper->getTranslatedText('test_order');
 					}
-					$bank_details = array_merge($db_details, json_decode($invoiceDetails, true));
+					
 					if(in_array($db_details['payment_id'], ['40','41'])) {
 						$comments .= PHP_EOL . $paymentHelper->getTranslatedText('guarantee_text');
 						if($tid_status == '75' && $db_details['payment_id'] == '41')
@@ -95,8 +91,8 @@ class NovalnetOrderConfirmationDataProvider
 							$comments .= PHP_EOL . $paymentHelper->getTranslatedText('gurantee_sepa_pending_payment_text');
 						}
 					}
-					if (in_array($bank_details['paymentName'], ['novalnet_invoice', 'novalnet_prepayment']) && in_array($tid_status, ['91', '100'])) {
-						$comments .= PHP_EOL . $paymentService->getInvoicePrepaymentComments($bank_details);
+					if (in_array($db_details['paymentName'], ['novalnet_invoice', 'novalnet_prepayment']) && in_array($tid_status, ['91', '100'])) {
+						$comments .= PHP_EOL . $paymentService->getInvoicePrepaymentComments($db_details);
 					}
 					if($db_details['payment_id'] == '59' ) {
 						$comments .= $cashpayment_comments;
