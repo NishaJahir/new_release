@@ -86,8 +86,10 @@ class CaptureEventProcedure
 	    
 	    $orderInfo = $this->transaction->getTransactionData('tid', $tid);
 	$order_info = json_decode($orderInfo[0]->additionalInfo);
+	    $this->getLogger(__METHOD__)->error('capture', $order_info);
 	$key = $order_info->payment_id;
-
+	    $this->getLogger(__METHOD__)->error('keyyy', $key);
+	    
 	    if(in_array($status, ['85', '91', '98', '99'])) {
         $this->paymentService->doCaptureVoid($order, $paymentDetails, $tid, $key, true);
 	    } 
