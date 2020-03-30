@@ -179,13 +179,7 @@ class PaymentService
 	    'invoice_type'      => !empty($nnPaymentData['invoice_type']) ? $nnPaymentData['invoice_type'] : '0',
 	    'invoice_account_holder' => !empty($nnPaymentData['invoice_account_holder']) ? $nnPaymentData['invoice_account_holder'] : '0'   
 	];
-	$bank_info = [
-	'invoice_bankname'  => !empty($nnPaymentData['invoice_bankname']) ? $nnPaymentData['invoice_bankname'] : '0',
-	    'invoice_bankplace' => !empty($nnPaymentData['invoice_bankplace']) ? $nnPaymentData['invoice_bankplace'] : '0',
-	    'invoice_iban'      => !empty($nnPaymentData['invoice_iban']) ? $nnPaymentData['invoice_iban'] : '0',
-	    'invoice_bic'       => !empty($nnPaymentData['invoice_bic']) ? $nnPaymentData['invoice_bic'] : '0',
-		
-        ];
+	
 
         $transactionData = [
             'amount'           => $nnPaymentData['amount'] * 100,
@@ -194,8 +188,7 @@ class PaymentService
             'ref_tid'          => $nnPaymentData['tid'],
             'payment_name'     => $nnPaymentData['payment_method'],
             'order_no'         => $nnPaymentData['order_no'],
-            'additional_info'      => !empty($additional_info) ? json_encode($additional_info) : '0',
-	'bank_info'      => !empty($bank_info) ? json_encode($bank_info) : '0',
+            'additional_info'      => !empty($additional_info) ? json_encode($additional_info) : '0'
         ];
        
         if(in_array($nnPaymentData['payment_id'], ['27', '59']) || (in_array($nnPaymentData['tid_status'], ['85','86','90'])))
