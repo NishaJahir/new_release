@@ -74,5 +74,21 @@ class TransactionService
         return $order;
     }
     
-   
+   public function updateTransactionDatas($key, $value, $invoiceDetails)
+    {
+        $database = pluginApp(DataBase::class);
+        $order    = $database->query(TransactionLog::class)->where($key, '=', $value)->get();
+        $update_info = $order[0];
+        $additional_info = json_decode($update_info->additionalInfo, true);
+        $update_additional_info = [
+            'due_date' => '2020-05-01'
+        ];
+        $additional_info = array_merge($additional_info, $update_additional_info);
+        $update_info->additionalInfo = json_encode($additional_info);
+        
+        $database->save($update_info);
+	$this->getLogger(__METHOD__)->error('todo',$update_info);
+        return $update_info;
+    }
+	
 }
