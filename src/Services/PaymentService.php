@@ -175,14 +175,17 @@ class PaymentService
             'payment_id' => $nnPaymentData['payment_id'],
             'plugin_version' => $nnPaymentData['system_version'],
             'test_mode' => !empty($nnPaymentData['test_mode']) ? $this->paymentHelper->getTranslatedText('test_order',$lang) : '0',
-	    'invoice_bankname'  => !empty($nnPaymentData['invoice_bankname']) ? $nnPaymentData['invoice_bankname'] : '0',
-	    'invoice_bankplace' => !empty($nnPaymentData['invoice_bankplace']) ? $nnPaymentData['invoice_bankplace'] : '0',
-	    'invoice_iban'      => !empty($nnPaymentData['invoice_iban']) ? $nnPaymentData['invoice_iban'] : '0',
-	    'invoice_bic'       => !empty($nnPaymentData['invoice_bic']) ? $nnPaymentData['invoice_bic'] : '0',
 	    'due_date'          => !empty($nnPaymentData['due_date']) ? $nnPaymentData['due_date'] : '0',
 	    'invoice_type'      => !empty($nnPaymentData['invoice_type']) ? $nnPaymentData['invoice_type'] : '0',
 	    'invoice_account_holder' => !empty($nnPaymentData['invoice_account_holder']) ? $nnPaymentData['invoice_account_holder'] : '0'   
 	];
+	$bank_info = [
+	'invoice_bankname'  => !empty($nnPaymentData['invoice_bankname']) ? $nnPaymentData['invoice_bankname'] : '0',
+	    'invoice_bankplace' => !empty($nnPaymentData['invoice_bankplace']) ? $nnPaymentData['invoice_bankplace'] : '0',
+	    'invoice_iban'      => !empty($nnPaymentData['invoice_iban']) ? $nnPaymentData['invoice_iban'] : '0',
+	    'invoice_bic'       => !empty($nnPaymentData['invoice_bic']) ? $nnPaymentData['invoice_bic'] : '0',
+		
+        ];
 
         $transactionData = [
             'amount'           => $nnPaymentData['amount'] * 100,
@@ -192,6 +195,7 @@ class PaymentService
             'payment_name'     => $nnPaymentData['payment_method'],
             'order_no'         => $nnPaymentData['order_no'],
             'additional_info'      => !empty($additional_info) ? json_encode($additional_info) : '0',
+	'bank_info'      => !empty($bank_info) ? json_encode($bank_info) : '0',
         ];
        
         if(in_array($nnPaymentData['payment_id'], ['27', '59']) || (in_array($nnPaymentData['tid_status'], ['85','86','90'])))
@@ -848,10 +852,11 @@ class PaymentService
         $transaction_details['amount'] = $transaction_details['amount'] / 100;
         //Decoding the json as array
         $transaction_details['additionalInfo'] = json_decode( $transaction_details['additionalInfo'], true );
+	$transaction_details['bankInfo'] = json_decode( $transaction_details['bankInfo'], true );
         //Merging the array
-        $transaction_details = array_merge($transaction_details, $transaction_details['additionalInfo']);
+        $transaction_details = array_merge($transaction_details, $transaction_details['additionalInfo'], $transaction_details['bankInfo']);
         //Unsetting the redundant key
-        unset($transaction_details['additionalInfo']);
+        unset($transaction_details['additionalInfo'], $transaction_details['bankInfo']);
         return $transaction_details;
         }
     }
