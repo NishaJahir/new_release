@@ -755,7 +755,7 @@ class PaymentService
              $paymentData['paid_amount'] = 0;
              }
              $paymentData['booking_text'] = $transactionComments;  
-              $this->transactionLogData->updateTransactionDatas('orderNo', $order->id, $responseData);
+             
              $this->paymentHelper->updatePayments($tid, $responseData['tid_status'], $order->id);
              $this->paymentHelper->createPlentyPayment($paymentData);
          } else {
