@@ -30,22 +30,9 @@ class TransactionService
 {
     use Loggable;
      
-	/**
-	 *
-	 * @var PaymentService
-	 */
-	private $paymentService;
 	
-	/**
-	 * Constructor.
-	 *
-	 * @param PaymentService $paymentService
-	 */
-	 
-    public function __construct(PaymentService $paymentService)
-    {
-	    $this->paymentService  = $paymentService;
-	}
+	
+	
 
     /**
      * Save data in transaction table
