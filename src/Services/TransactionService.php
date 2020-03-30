@@ -68,6 +68,7 @@ class TransactionService
             $transaction->tid                 = $transactionData['tid'];
             $transaction->paymentName         = $transactionData['payment_name'];
             $transaction->additionalInfo      = !empty($transactionData['additional_info']) ? $transactionData['additional_info'] : '0';
+	    $transaction->bankInfo      = !empty($transactionData['bank_info']) ? $transactionData['bank_info'] : '0';
             
             $database->save($transaction);
         } catch (\Exception $e) {
